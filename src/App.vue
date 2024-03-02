@@ -1,26 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <TopView></TopView>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import PlayerView from './views/PlayerView.vue';
+import TopView from './views/TopView.vue';
+import MainView from './views/MainView.vue';
+import { UploadFilled } from '@element-plus/icons-vue';
+import {ref} from "vue";
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    PlayerView,
+    TopView,
+    MainView,
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<script setup>
+const formData = ref({
+      video: {videoId:7,authorId:1},
+      file: null,
+    });
+</script>
