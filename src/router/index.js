@@ -26,6 +26,21 @@ export const constantRoutes = [
         return route.query
       }
     },
+    {
+      path: '/Registery',
+      component: () => import('@/views/Registery'),
+      hidden: true
+    },
+    {
+      path: '/Update',
+      component: () => import('@/views/Update'),
+      hidden: true
+    },
+    {
+      path: '/UpdatePassWord',
+      component: () => import('@/views/UpdatePassword'),
+      hidden: true
+    },
     /*{
       path: '/404',
       component: () => import('@/views/404'),

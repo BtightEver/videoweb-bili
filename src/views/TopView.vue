@@ -25,7 +25,7 @@
               <el-avatar :size="50" :src="circleUrl" />
               <template #dropdown>
                 <el-dropdown-menu>
-                  <router-link to="/UserView">
+                  <router-link to="/Update">
                     <el-dropdown-item><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
                         clip-rule="evenodd">
                         <path
@@ -33,7 +33,7 @@
                       </svg>个人中心
                     </el-dropdown-item>
                   </router-link>
-                  <el-dropdown-item>Action2</el-dropdown-item>
+                  <el-dropdown-item>Action 2</el-dropdown-item>
                   <el-dropdown-item>Action 3</el-dropdown-item>
                   <el-dropdown-item>Action 4</el-dropdown-item>
                   <router-link to="/Login">
@@ -49,11 +49,14 @@
           </el-col>
           <el-divider />
         </el-row></el-header>
-      <el-main><router-view class="TopView_routerView">
-        </router-view></el-main>
+      <el-main>
+        <router-view class="TopView_routerView" @update-user="updateUser">
+        </router-view>
+      </el-main>
     </el-container>
   </div>
 </template>
+
 <script>
 export default {
   name: 'TopView',
@@ -65,15 +68,30 @@ export default {
 import logo from "@/assets/logo.jpg"
 import { ref } from 'vue'
 import { Calendar, Search, User } from '@element-plus/icons-vue'
+import { defineComponent } from 'vue'       // 导入子组件注册
 import { reactive, toRefs } from 'vue'
 import router from '../router'
+import Update from './Update.vue'
+
+const user = ref(JSON.parse(localStorage.getItem("user")))
+
+// 根据 user 是否为 null 设置 circleUrl
+let userAvatar = ''
+if (user.value !== null) {
+  userAvatar = user.value.avatar
+}
+else{
+  userAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+}
+
 const state = reactive({
   circleUrl:
-    'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+    userAvatar,       //顶部导航栏显示的用户的头像图片
   squareUrl:
     'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png',
   sizeList: ['small', '', 'large'],
 })
+console.log()
 const { circleUrl, squareUrl, sizeList } = toRefs(state)
 const input = ref('')
 const url =
@@ -85,6 +103,16 @@ const handleSuffixClick = () => {
   console.log("在导航栏获取到input是" + input.value)
   router.push({ name: "/SearchView", query: { "input": input.value } })
 }
+
+const updateUser = (userData) => {
+  user.value = userData
+}
+
+const UpdateComponent = defineComponent({
+  components: {
+    Update        // 注册子组件 Update
+  }
+})
 </script>
 
 
