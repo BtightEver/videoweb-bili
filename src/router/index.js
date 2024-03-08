@@ -41,6 +41,11 @@ export const constantRoutes = [
       component: () => import('@/views/UpdatePassword'),
       hidden: true
     },
+    {
+      path: '/Comment',
+      component: () => import('@/views/Comment'),
+      hidden: true
+    },
     /*{
       path: '/404',
       component: () => import('@/views/404'),
