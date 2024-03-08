@@ -1,5 +1,11 @@
 <template>
     <div class="bottom-input">
+         <!-- 使用 v-for 遍历 commentList，并向 EveryComment 组件传递每个评论对象 comment -->
+         <div class="comment-container">
+            <ul>
+                <EveryComment v-for="comment in commentList" :key="comment.id" :comment="comment" :deleteComment="DeleteComment"/>
+            </ul>
+        </div>
         <el-input
             placeholder="请输入内容"
             v-model="comment.content"
@@ -8,12 +14,6 @@
         <el-row class="button-row">
             <el-button type="primary" round @click="publishComment">发表评论</el-button>
         </el-row>
-         <!-- 使用 v-for 遍历 commentList，并向 EveryComment 组件传递每个评论对象 comment -->
-         <div class="comment-container">
-            <ul>
-                <EveryComment v-for="comment in commentList" :key="comment.id" :comment="comment" :deleteComment="DeleteComment"/>
-            </ul>
-        </div>
     </div>
 </template>
 
@@ -25,11 +25,15 @@ import { onMounted } from 'vue';
 import request from '@/utils/request';
 import EveryComment from './EveryComment.vue';
 
-const ComTestComponent = defineComponent({          // 注册组件
-    components: {
-        EveryComment
-    }
-});
+    onMounted(() => {       //视图渲染时加载评论
+        getCommentsByVideoId();
+    });
+
+    const ComTestComponent = defineComponent({          // 注册组件
+        components: {
+            EveryComment
+        }
+    });
 
     let comment = ref({ cid: '', uid: '', commentator: '', videoId: '', likes: 0, dislikes: 0, creatTime: new Date(), content: ''})
     let user = JSON.parse(localStorage.getItem("user"))
@@ -38,7 +42,7 @@ const ComTestComponent = defineComponent({          // 注册组件
 
     const getCommentsByVideoId =()=> {      // 获取视频评论
         request.get(`/Comment/getCommentsByVideoId/${videoId}`).then(res => {       //反单引号 
-            console.log("")
+            //console.log("commentList："+JSON.stringify(res.data.commentList))
             commentList.value = res.data.commentList            //赋值需要加上 .value
         }).catch(error => {
             console.error(error)
@@ -56,10 +60,13 @@ const ComTestComponent = defineComponent({          // 注册组件
     
     const publishComment =()=> {        //用户发表评论
         if(user != null){
+
+            // 获取当前时间的毫秒数
+            const currentTime = Date.now();
             comment.value.uid = user.uid
             comment.value.commentator = user.userName
             comment.value.videoId = '123'
-            comment.value.cid = user.uid + '_' + '123'
+            comment.value.cid = user.uid + '_' + '123' + "_" + currentTime
 
             request.post('/Comment/addComment', comment.value).then(res => {
                 if(res.code === 200){
@@ -75,9 +82,10 @@ const ComTestComponent = defineComponent({          // 注册组件
         }
     }
 
-    onMounted(() => {       //视图渲染时加载评论
+    const DeleteComment =()=> {     //删除评论后重新渲染视图
         getCommentsByVideoId();
-    });
+    }
+
 </script>
 
 <style>
@@ -85,7 +93,7 @@ const ComTestComponent = defineComponent({          // 注册组件
     position: fixed;
     bottom: 100;
     left: 0;
-    width: 100%;
+    width: 99%;
     padding: 10px;
     background-color: #f5f5f5;
 }
@@ -99,7 +107,7 @@ const ComTestComponent = defineComponent({          // 注册组件
     border-radius: 5px;
 }
 .comment-container {
-    max-height: 700px; /* 设置最大高度 */
+    max-height: 750px; /* 设置最大高度 */
     overflow-y: auto; /* 启用垂直滚动条 */
 }
 </style>

@@ -3,7 +3,7 @@
     <el-container>
       <el-header><el-row>
           <el-col :span="6">
-            <router-link :to="{ path: '/MainView' }">
+            <router-link :to="{ path: '/MainView' }">     <!--跳转到首页-->
               <div ref="icon">
                 <svg style="transition:all .3s ease" ref="home_icon" xmlns="http://www.w3.org/2000/svg" width="32"
                   height="32" viewBox="0 0 24 24">
@@ -22,10 +22,10 @@
           </el-col>
           <el-col :span="6" :offset="4">
             <el-dropdown class="userAvatar">
-              <el-avatar :size="50" :src="circleUrl" />
+              <el-avatar :size="50" :src="userAvatar" />   <!--在顶部导航栏显示用户头像-->
               <template #dropdown>
                 <el-dropdown-menu>
-                  <router-link to="/Update">
+                  <router-link to="/Update">    <!--跳转到个人中心页面-->
                     <el-dropdown-item><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
                         clip-rule="evenodd">
                         <path
@@ -36,7 +36,7 @@
                   <el-dropdown-item>Action 2</el-dropdown-item>
                   <el-dropdown-item>Action 3</el-dropdown-item>
                   <el-dropdown-item>Action 4</el-dropdown-item>
-                  <router-link to="/Login">
+                  <router-link to="/Login" @click="logOut">     <!--退出后，跳转到登录页面-->
                     <el-dropdown-item><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
                         clip-rule="evenodd">
                         <path
@@ -49,9 +49,8 @@
           </el-col>
           <el-divider />
         </el-row></el-header>
-      <el-main>
-        <router-view class="TopView_routerView" @update-user="updateUser">
-        </router-view>
+      <el-main>     <!--页面的主位置，渲染跳转之后的组件-->
+        <router-view @update-user="handleUpdateUser"></router-view>   <!--跳转之后的组件，并接收子组件传过来的数据更新这个组件中的数据，并渲染视图-->
       </el-main>
     </el-container>
   </div>
@@ -65,64 +64,48 @@ export default {
 
 
 <script  setup>
-import logo from "@/assets/logo.jpg"
 import { ref } from 'vue'
-import { Calendar, Search, User } from '@element-plus/icons-vue'
 import { defineComponent } from 'vue'       // 导入子组件注册
-import { reactive, toRefs } from 'vue'
 import router from '../router'
 import Update from './Update.vue'
 
-const user = ref(JSON.parse(localStorage.getItem("user")))
-
-// 根据 user 是否为 null 设置 circleUrl
-let userAvatar = ''
-if (user.value !== null) {
-  userAvatar = user.value.avatar
-}
-else{
-  userAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-}
-
-const state = reactive({
-  circleUrl:
-    userAvatar,       //顶部导航栏显示的用户的头像图片
-  squareUrl:
-    'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png',
-  sizeList: ['small', '', 'large'],
-})
-console.log()
-const { circleUrl, squareUrl, sizeList } = toRefs(state)
-const input = ref('')
-const url =
-  'http://localhost:8090/images/0/demo.jpg'
-// 自定义图标组件
-const handleSuffixClick = () => {
-  console.log("点击了后缀图标")
-  // 在这里执行后缀图标点击事件的逻辑
-  console.log("在导航栏获取到input是" + input.value)
-  router.push({ name: "/SearchView", query: { "input": input.value } })
-}
-
-const updateUser = (userData) => {
-  user.value = userData
-}
-
-const UpdateComponent = defineComponent({
+const UpdateComponent = defineComponent({       //用于在 TopView 组件中注册子组件
   components: {
     Update        // 注册子组件 Update
   }
 })
+
+let userAvatar = ref('')
+const user = ref(JSON.parse(localStorage.getItem("user")))    //获取登录的用户信息
+if (user.value !== null) {      // 根据 user 是否为 null 设置 circleUrl
+  userAvatar.value = user.value.avatar
+}
+else{
+  userAvatar.value = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+}
+
+const input = ref('')
+
+const handleSuffixClick = () => {     // 在这里执行后缀图标点击事件的逻辑
+  console.log("在导航栏获取到input是" + input.value)
+  router.push({ name: "/SearchView", query: { "input": input.value } })     //路由到点击的组件页面，并将在搜索框输入的参数input传递过去
+}
+
+const handleUpdateUser =(userData)=> {
+  user.value = userData;    // 获取子组件传过来的数据
+  userAvatar.value = user.value.avatar;    // 将数据赋值给 userAvatar 并更新视图
+}
+
+const logOut =()=> {
+  localStorage.removeItem("user");    //退出登录后删除 localStorage 中的用户信息
+}
+
 </script>
 
 
 <style scoped>
 .el-row {
   margin-bottom: 10px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 
 .el-col {
