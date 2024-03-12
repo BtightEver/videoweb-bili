@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import Home from '@/views/home/carouselMap.vue'
+
 import Information from '@/views/information/aboutUs.vue'
 import Message from '@/views/message/messagePlate.vue'
 import Product from '@/views/product/productPlate.vue'
@@ -108,17 +108,7 @@ export const constantRoutes = [
   },
 
 
-  {
-    path: '/',
-    component: Home,
-    redirect: '/home',
-    children: [
-      {
-        path: '/home',
-        component: Home,
-      }
-    ]
-  },
+
   {
     path: '/information',
     component: Information
@@ -141,26 +131,6 @@ export const constantRoutes = [
         component: Vtype
       }
     ]
-  },
-  {
-    path: '/banner1',
-    component: () => import('@/views/home/banner/b1/carouselMap1')
-  },
-  {
-    path: '/banner2',
-    component: () => import('@/views/home/banner/b2/carouselMap2')
-  },
-  {
-    path: '/banner3',
-    component: () => import('@/views/home/banner/b3/carouselMap3')
-  },
-  {
-    path: '/banner4',
-    component: () => import('@/views/home/banner/b4/carouselMap4')
-  },
-  {
-    path: '/banner5',
-    component: () => import('@/views/home/banner/b5/carouselMap5')
   },
 
   {

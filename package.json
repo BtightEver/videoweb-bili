@@ -12,7 +12,6 @@
     "core-js": "^3.8.3",
     "dplayer": "^1.27.1",
     "element-plus": "^2.5.0",
-    "swiper": "^11.0.7",
     "vue": "^3.2.13",
     "vue-dplayer": "^0.0.10",
     "vue-router": "^4.3.0"

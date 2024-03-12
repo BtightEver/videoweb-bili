@@ -1,11 +1,10 @@
 <template>
   <div class="common-layout">
-    <div class="el-menu-layout">
+    <div class="el-menu-layout" height="10px">
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" router="true">
-        <!--================================================================--><el-icon><Search /></el-icon>
         <el-input class="searchInput" v-model="searchContent" placeholder="Please input" style="width: 300px">      <!--搜索框-->
           <template #append>
-            <el-button :icon="Search" circle @click="handleSuffixClick" class="searchButton" size="small"/>
+            <el-button :icon="Search" circle @click="handleSuffixClick" />
           </template>
         </el-input>
         <!--================================================================-->
