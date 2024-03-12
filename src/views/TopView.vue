@@ -7,9 +7,7 @@
             <el-button :icon="Search" circle @click="handleSuffixClick" />
           </template>
         </el-input>
-        <!--================================================================-->
         <el-menu-item index="/MainView">首页</el-menu-item>
-        <!--================================================================-->
         <el-menu-item style="float: right;">
           <el-dropdown @command="handleDFCommand">
             <span class="product">产品</span>
@@ -47,11 +45,7 @@
             </template>
           </el-dropdown>
         </el-menu-item>
-        <!--================================================================-->
-        <!--el-menu-item index="/video">视频</el-menu-item-->
-        <!--el-menu-item index="/message">消息中心</el-menu-item-->
         <el-menu-item index="/information">关于我们</el-menu-item>
-        <!--================================================================-->
         <el-menu-item>
           <el-dropdown @command="handleMyCommand">
             <span class="userAvatar">
