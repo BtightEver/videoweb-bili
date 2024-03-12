@@ -1,11 +1,8 @@
 <template>
-  <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #0f9876">
-    <div style="display: flex; background-color: white; width: 50%; border-radius: 5px; overflow: hidden;">
-      <div style="flex: 1">
-        <img src="@/assets/images/login.jpg" alt="" style="width: 100%;"> 
-      </div>
+  <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background-color: burlywood;">
+    <div style="display: flex; background-color: white; width: 30%; border-radius: 5px; overflow: hidden;">
       <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
-        <el-form :model="user" style="width: 80%">
+        <el-form :model="user" style="width: 70%">
           <div style="font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 20px">欢迎登陆普惠金融视频分享平台</div>
           <el-form-item prop="uid">
             <el-input prefix-icon="el-icon-user" size="medium" placeholder="请输入用户账号" v-model="uid"></el-input>
@@ -61,6 +58,9 @@ export default{
   },
 
   mounted(){
+    if(this.$route.query.uid != null){
+      this.uid = this.$route.query.uid;
+    }
     this.identifyCode = '';
     this.makeCode(this.identifyCodes, 4);
   },
@@ -71,7 +71,7 @@ export default{
 
   methods: {
     login(){
-      
+
       if (this.sidentifyMode == '') {     //验证验证码是否为空
         ElMessage({ type: 'error', message: '验证码不能为空!' });
         this.refreshCode();
@@ -86,9 +86,10 @@ export default{
             this.stateCode = res.code;
             if(this.stateCode === 200){
               ElMessage({ type: 'success', message: '登录成功！' });
-              this.user = JSON.stringify(res.data.user);
-              localStorage.setItem("user", this.user);
-              this.$router.push('/Update');     //可以设置登陆成功后跳转的页面
+              this.user = res.data.user;
+              localStorage.setItem("user", JSON.stringify(res.data.user));
+              this.$emit('update-user', this.user);     //出发父组件的自定义事件 update-user
+              this.$router.push('/MainView');     //可以设置登陆成功后跳转的页面
             }
             else {
               ElMessage({ type: 'error', message: '用户名或密码错误！' });

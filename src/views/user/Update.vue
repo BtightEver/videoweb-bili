@@ -1,11 +1,8 @@
 <template>
-    <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #0f9876">
-      <div style="display: flex; background-color: white; width: 50%; border-radius: 5px; overflow: hidden;">
-        <div style="flex: 1">
-          <img src="@/assets/images/login.jpg" alt="" style="width: 100%;"> 
-        </div>
+    <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background-color: burlywood">
+      <div style="display: flex; background-color: white; width: 30%; border-radius: 5px; overflow: hidden;">
         <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
-          <el-form :model="user" style="width: 80%" label-width="80px">
+          <el-form :model="user" style="width: 70%" label-width="80px">
             <div style="font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 20px">修改个人信息</div>
             <div style="font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 20px; color: blue;">   
                 <el-upload
@@ -65,7 +62,7 @@ export default{
                         ElMessage({ type: 'success', message: '保存成功' });
                         this.user = res.data.user;      // 更新 user 信息
                         localStorage.setItem("user", JSON.stringify(this.user));        //更新成功后更新 localStorage 中的 user 信息
-                        this.$emit('update-user', this.user);     //出发父组件的自定义事件 update-user
+                        this.$emit('update-user', this.user);     //触发父组件的自定义事件 update-user
                     }
                 }).catch(error => {
                     console.error(error);
@@ -74,30 +71,21 @@ export default{
         },
 
         back(){
-
+          this.$router.push('/MainView');
         },
 
         //头像上传函数
         handleAvatarSuccess(res, file, fileList) {
           console.log(res.data.path)
           this.user.avatar = res.data.path;     //因为修改前后 user.avatar 相同，所以不会触发下载
-          /*this.user.avatar = '111'
-          setTimeout(() => {
-            this.user.avatar = res.data.path;
-          }, 1000); // 1000毫秒，即1秒*/
         },
 
         beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
             const isLt2M = file.size / 1024 / 1024 < 2;
-
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
-            }
             if (!isLt2M) {
             this.$message.error('上传头像图片大小不能超过 2MB!');
             }
-            return isJPG && isLt2M;
+            return isLt2M;
         }
     }
 }
@@ -105,7 +93,6 @@ export default{
 
 <style>
   .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
     position: relative;

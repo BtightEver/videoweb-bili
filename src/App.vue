@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PlayerView from './views/PlayerView.vue';
+import PlayerView from './views/video/PlayerView.vue';
 import TopView from './views/TopView.vue';
 import MainView from './views/MainView.vue';
 import { UploadFilled } from '@element-plus/icons-vue';
@@ -23,4 +23,4 @@ const formData = ref({
       video: {videoId:7,authorId:1},
       file: null,
     });
-</script>
+</script>./views/video/PlayerView.vue

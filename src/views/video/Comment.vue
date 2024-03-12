@@ -1,20 +1,15 @@
 <template>
-    <div class="bottom-input">
-         <!-- 使用 v-for 遍历 commentList，并向 EveryComment 组件传递每个评论对象 comment -->
-         <div class="comment-container">
-            <ul>
-                <EveryComment v-for="comment in commentList" :key="comment.id" :comment="comment" :deleteComment="DeleteComment"/>
-            </ul>
-        </div>
         <el-input
             placeholder="请输入内容"
             v-model="comment.content"
             clearable>
         </el-input>
-        <el-row class="button-row">
+        <div class="button-container">
             <el-button type="primary" round @click="publishComment">发表评论</el-button>
-        </el-row>
-    </div>
+        </div>
+        <ul>
+            <EveryComment v-for="comment in commentList" :key="comment.id" :comment="comment" :deleteComment="DeleteComment"/>
+        </ul>
 </template>
 
 <script setup>
@@ -24,6 +19,7 @@ import { defineComponent } from 'vue';
 import { onMounted } from 'vue';
 import request from '@/utils/request';
 import EveryComment from './EveryComment.vue';
+import router from '../../router'
 
     onMounted(() => {       //视图渲染时加载评论
         getCommentsByVideoId();
@@ -37,13 +33,19 @@ import EveryComment from './EveryComment.vue';
 
     let comment = ref({ cid: '', uid: '', commentator: '', videoId: '', likes: 0, dislikes: 0, creatTime: new Date(), content: ''})
     let user = JSON.parse(localStorage.getItem("user"))
-    let videoId = '123'
     let commentList = ref([])
+    const props = defineProps({
+        videoId: {
+            type: String,
+            required: true
+        }
+    });
 
     const getCommentsByVideoId =()=> {      // 获取视频评论
-        request.get(`/Comment/getCommentsByVideoId/${videoId}`).then(res => {       //反单引号 
+        request.get(`/Comment/getCommentsByVideoId/${props.videoId}`).then(res => {       //反单引号 
             //console.log("commentList："+JSON.stringify(res.data.commentList))
             commentList.value = res.data.commentList            //赋值需要加上 .value
+            console.log("commentList.value="+JSON.stringify(commentList.value))
         }).catch(error => {
             console.error(error)
         })
@@ -65,8 +67,8 @@ import EveryComment from './EveryComment.vue';
             const currentTime = Date.now();
             comment.value.uid = user.uid
             comment.value.commentator = user.userName
-            comment.value.videoId = '123'
-            comment.value.cid = user.uid + '_' + '123' + "_" + currentTime
+            comment.value.videoId = props.videoId
+            comment.value.cid = user.uid + '_' + 'props.videoId' + "_" + currentTime
 
             request.post('/Comment/addComment', comment.value).then(res => {
                 if(res.code === 200){
@@ -78,7 +80,7 @@ import EveryComment from './EveryComment.vue';
             })
         }
         else {
-            ElMessage({ type: 'error', message: '请登录后评论！' });
+            ElMessage({ type: 'error', message: '点击上方头像完成登录后评论！' });
         }
     }
 
@@ -108,6 +110,9 @@ import EveryComment from './EveryComment.vue';
 }
 .comment-container {
     max-height: 750px; /* 设置最大高度 */
-    overflow-y: auto; /* 启用垂直滚动条 */
+}
+.button-container {
+    display: flex;
+    justify-content: flex-end;
 }
 </style>

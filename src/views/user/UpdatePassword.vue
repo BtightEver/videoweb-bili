@@ -1,11 +1,8 @@
 <template>
-    <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #0f9876">
-      <div style="display: flex; background-color: white; width: 50%; border-radius: 5px; overflow: hidden;">
-        <div style="flex: 1">
-          <img src="@/assets/images/login.jpg" alt="" style="width: 100%;"> 
-        </div>
+    <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background-color: burlywood">
+      <div style="display: flex; background-color: white; width: 30%; border-radius: 5px; overflow: hidden;">
         <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
-          <el-form :model="user" style="width: 80%">
+          <el-form :model="user" style="width: 70%">
             <div style="font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 20px">修改密码</div>
             <el-form-item prop="password">
               <el-input type="password" prefix-icon="el-icon-user" size="medium" placeholder="请输入原密码" v-model="password"></el-input>
@@ -24,7 +21,7 @@
       </div>
     </div>
   </template>
-
+  
 <script>
 import { ElMessage } from 'element-plus'
 import request from '@/utils/request'

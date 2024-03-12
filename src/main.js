@@ -7,7 +7,9 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import Axios from "axios"
 import router from './router'
+
 Axios.defaults.baseURL = 'http://localhost:8088';
+
 createApp(App)
 .use(ElementPlus)
 .use(VueDPlayer)
